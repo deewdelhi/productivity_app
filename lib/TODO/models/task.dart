@@ -1,8 +1,4 @@
-import 'dart:convert';
-import 'dart:ffi';
-import 'package:flutter/material.dart';
 import 'package:productivity_app/TODO/models/priority.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MyTask {
   MyTask(

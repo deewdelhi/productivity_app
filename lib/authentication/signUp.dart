@@ -4,7 +4,6 @@ import 'package:productivity_app/widgets/image_upload.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'; // in the firestore there is data NOT files
 import 'package:firebase_storage/firebase_storage.dart'; // sending files to firebase, pat of the sdk
-import 'package:google_sign_in/google_sign_in.dart';
 
 final _firebase = FirebaseAuth.instance; // this also in login sau in welcome
 
@@ -84,7 +83,13 @@ class _signUpScreenState extends State<signUpScreen> {
         'email': _enteredEmail,
         'image_url': imageUrl,
       });
-      print(userCredenitisl);
+
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc('${userCredentials.user!.uid}')
+          .collection("SOCIAL")
+          .doc("manageFriends")
+          .set({'friends': [], 'sent_requests': [], 'incoming_requests': []});
     } on FirebaseAuthException catch (error) {
       if (error.code == 'email-already-in-use') {
         //.....

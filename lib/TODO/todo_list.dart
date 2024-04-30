@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:productivity_app/TODO/models/priority.dart';
+
 import 'package:productivity_app/TODO/models/todo.dart';
 
 import 'package:productivity_app/TODO/widgets/grid_items/task_grid_item.dart';
@@ -9,10 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:productivity_app/providers/repository_provider.dart';
 import 'package:productivity_app/providers/user_provider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'; // in the firestore there is data NOT files
-import 'package:firebase_storage/firebase_storage.dart'; // sending files to firebase, pat of the sdk
-import 'dart:math';
-import 'package:productivity_app/TODO/models/dummy_tasks.dart';
+
 import 'package:productivity_app/TODO/models/task.dart';
 
 class ToDoListScreen extends ConsumerStatefulWidget {

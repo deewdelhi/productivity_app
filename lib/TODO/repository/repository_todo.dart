@@ -1,4 +1,3 @@
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:productivity_app/TODO/models/priority.dart';
 import 'package:productivity_app/TODO/models/task.dart';
 import 'package:productivity_app/TODO/models/todo.dart';
@@ -8,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart'; // in the firestore there is data NOT files
 
-class FirebaseRepository {
+class FirebaseRepositoryTODO {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   //!  ==============================   GET DATA   ==============================
 

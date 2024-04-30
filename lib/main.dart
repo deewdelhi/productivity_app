@@ -4,6 +4,7 @@ import 'package:productivity_app/authentication/logIn.dart';
 import 'package:productivity_app/authentication/welcome.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:productivity_app/widgets/tabs.dart';
 import 'firebase_options.dart';
 import 'package:productivity_app/authentication/splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -36,7 +37,7 @@ class MyApp extends ConsumerWidget {
             return SplashScreen();
           }
           if (snapshot.hasData) {
-            return AllToDoListsScreen();
+            return TabsScreen();
           }
           return WelcomeScreen();
         },

@@ -1,5 +1,5 @@
-class User {
-  User(
+class MyUser {
+  MyUser(
       {required this.firstNmae,
       required this.lastName,
       required this.email,
@@ -11,5 +11,5 @@ class User {
   final String lastName;
   final String email;
   final String pictureUrl;
-  List<User> following = [];
+  List<MyUser> following = [];
 }

@@ -4,8 +4,8 @@ import 'package:productivity_app/TODO/models/todo.dart';
 import 'package:productivity_app/TODO/repository/repository_todo.dart';
 import 'package:productivity_app/providers/user_provider.dart';
 
-final firebaseRepositoryProvider = Provider<FirebaseRepository>((ref) {
-  return FirebaseRepository();
+final firebaseRepositoryProvider = Provider<FirebaseRepositoryTODO>((ref) {
+  return FirebaseRepositoryTODO();
 });
 
 //!  ==============================   GET DATA PROVIDER   ==============================
