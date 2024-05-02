@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:productivity_app/providers/repository_provider_SOCIAL.dart';
 
-class MainDrawer extends StatelessWidget {
+class MainDrawer extends ConsumerWidget {
   const MainDrawer({super.key, required this.onSelectScreen});
 
   final void Function(String identifier) onSelectScreen;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    bool areFriendRequests =
+        ref.watch(firendListsProvider).value![2].isNotEmpty;
+
     return Drawer(
       child: Column(
         children: [
@@ -43,27 +48,26 @@ class MainDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            // TODO : use the Stack widget so you can pt a bubble on the icon to show the number of incoming requests if there are
             leading: Stack(children: [
               Icon(
-                Icons.people,
+                Icons.group_add_outlined,
                 size: 26,
                 color: Theme.of(context).colorScheme.onBackground,
               ),
-              // TODO:  make it appear and dissapear based on the freinds request
-              Positioned(
-                top: 1,
-                left: 15,
-                child: Container(
-                  width: 10,
-                  height: 10,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.red,
+              if (areFriendRequests)
+                Positioned(
+                  top: 1,
+                  left: 15,
+                  child: Container(
+                    width: 10,
+                    height: 10,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.red,
+                    ),
                   ),
                 ),
-              ),
             ]),
             title: Text(
               'Friends',
@@ -92,6 +96,36 @@ class MainDrawer extends StatelessWidget {
             onTap: () {
               onSelectScreen('Sign out');
             },
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.group_outlined,
+              size: 26,
+              color: Theme.of(context).colorScheme.onBackground,
+            ),
+            title: Text(
+              'My groups',
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                    color: Theme.of(context).colorScheme.onBackground,
+                    fontSize: 24,
+                  ),
+            ),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: Icon(
+              Icons.settings_outlined,
+              size: 26,
+              color: Theme.of(context).colorScheme.onBackground,
+            ),
+            title: Text(
+              'Settings',
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                    color: Theme.of(context).colorScheme.onBackground,
+                    fontSize: 24,
+                  ),
+            ),
+            onTap: () {},
           ),
         ],
       ),
