@@ -1,16 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:productivity_app/models/user.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SearchPage extends StatefulWidget {
-  const SearchPage({super.key, required this.users});
+import 'package:productivity_app/models/user.dart';
+import 'package:productivity_app/providers/repository_provider_SOCIAL.dart';
+
+class SearchPage extends ConsumerStatefulWidget {
+  const SearchPage(
+      {super.key,
+      required this.users,
+      required this.usersRequests,
+      required this.usersFriends,
+      required this.usersIncomingRequests});
 
   final List<MyUser> users;
+  final List<String> usersFriends;
+  final List<String> usersRequests;
+  final List<String> usersIncomingRequests;
 
   @override
-  _SearchPageState createState() => _SearchPageState();
+  ConsumerState<SearchPage> createState() => _SearchPageState();
 }
 
-class _SearchPageState extends State<SearchPage> {
+class _SearchPageState extends ConsumerState<SearchPage> {
   final TextEditingController _textController = TextEditingController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final ScrollController _scrollController = ScrollController();
@@ -39,9 +50,8 @@ class _SearchPageState extends State<SearchPage> {
           .where((friend) =>
               friend.firstNmae.toLowerCase().contains(searchText.toLowerCase()))
           .toList();
-      print(" i actually get exec");
-      print(_filteredList);
     });
+    print(_filteredList);
   }
 
   @override
@@ -116,12 +126,62 @@ class _SearchPageState extends State<SearchPage> {
               },
               trailing: PopupMenuButton(
                 itemBuilder: (BuildContext context) {
-                  return [
-                    PopupMenuItem(
-                      child: Text('Delete'),
-                      value: 'delete',
-                    ),
-                  ];
+                  List<PopupMenuItem> menuItems = [];
+
+                  if (widget.usersFriends.contains(user.id)) {
+                    menuItems.add(
+                      PopupMenuItem(
+                        child: Text('Remove friend'),
+                        onTap: () {
+                          ref.read(removeFriendProvider(user.id));
+                        },
+                      ),
+                    );
+                  } else if (widget.usersRequests.contains(user.id)) {
+                    menuItems.add(
+                      PopupMenuItem(
+                        child: Text('Undo request'),
+                        onTap: () {
+                          setState(() {
+                            ref.read(undoFriendRequeestProvider(user.id));
+                          });
+                        },
+                      ),
+                    );
+                  } else if (widget.usersIncomingRequests.contains(user.id)) {
+                    menuItems.addAll([
+                      PopupMenuItem(
+                        child: Text('Delete user request'),
+                        onTap: () {
+                          setState(() {
+                            ref.read(
+                                addressFriendRequestProvider({user.id: false}));
+                          });
+                        },
+                      ),
+                      PopupMenuItem(
+                        child: Text('Accept request'),
+                        onTap: () {
+                          ref.read(
+                              addressFriendRequestProvider({user.id: true}));
+                        },
+                      ),
+                    ]);
+                  } else {
+                    // Default option
+                    menuItems.add(
+                      PopupMenuItem(
+                        child: Text('send request'),
+                        onTap: () {
+                          setState(() {
+                            ref.read(sendFriendRequestProvider(user.id));
+                          });
+                        },
+                      ),
+                    );
+                  }
+
+                  return menuItems;
                 },
               ),
             );

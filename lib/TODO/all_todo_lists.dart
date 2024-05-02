@@ -7,7 +7,7 @@ import "package:productivity_app/TODO/widgets/grid_items/todo_grid_item.dart";
 import "package:productivity_app/TODO/widgets/new_objects/new_todo.dart";
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:productivity_app/providers/repository_provider.dart';
+import 'package:productivity_app/providers/repository_provider_TODO.dart';
 import 'package:productivity_app/providers/user_provider.dart';
 
 import 'package:uuid/uuid.dart';

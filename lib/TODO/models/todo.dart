@@ -27,7 +27,6 @@ class Todo {
       if (id != null) "id": id,
       if (title != null) "title": title,
       if (tasks != null) "tasks": tasks,
-      // TODO: check these
     };
   }
 }

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:productivity_app/TODO/task_detail.dart';
 
 import 'package:productivity_app/TODO/widgets/dialog_delete_confirmation.dart';
-import 'package:productivity_app/providers/repository_provider.dart';
+import 'package:productivity_app/providers/repository_provider_TODO.dart';
 
 class TaskGridItem extends ConsumerWidget {
   const TaskGridItem({

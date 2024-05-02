@@ -5,7 +5,7 @@ import "package:productivity_app/TODO/models/todo.dart";
 import 'package:flutter/material.dart';
 import 'package:productivity_app/TODO/todo_list.dart';
 import 'package:productivity_app/TODO/widgets/dialog_delete_confirmation.dart';
-import 'package:productivity_app/providers/repository_provider.dart';
+import 'package:productivity_app/providers/repository_provider_TODO.dart';
 
 class ToDoGridItem extends ConsumerWidget {
   const ToDoGridItem({
