@@ -4,6 +4,7 @@ import 'package:productivity_app/widgets/image_upload.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'; // in the firestore there is data NOT files
 import 'package:firebase_storage/firebase_storage.dart'; // sending files to firebase, pat of the sdk
+import 'dart:math';
 
 final _firebase = FirebaseAuth.instance; // this also in login sau in welcome
 
@@ -22,35 +23,18 @@ class _signUpScreenState extends State<signUpScreen> {
   var _enteredPassword = "";
   var _enteredEmail = "";
   var _enteredUsername = "";
+  var _enteredFirstName = "";
+  var _enteredLastName = "";
   var _isAuthenticating = false;
   File? _selectedImage;
-  //var userCredentialGoogle = {};
-// for loading spinner while the imkage is uploading on firebase
-
-// ! sign in with google implementation
-  // Future<dynamic> signInWithGoogle() async {
-  //   try {
-  //     final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-  //     final GoogleSignInAuthentication? googleAuth =
-  //         await googleUser?.authentication;
-
-  //     final credential = GoogleAuthProvider.credential(
-  //       accessToken: googleAuth?.accessToken,
-  //       idToken: googleAuth?.idToken,
-  //     );
-
-  //     return await FirebaseAuth.instance.signInWithCredential(credential);
-  //   } on Exception catch (e) {
-
-  //     print('exception->$e');
-  //   }
-  // }
 
   void _submit() async {
+    var rng = Random().nextInt(237) + 1;
+    String imageUrl = "https://placedog.net/800/640?id=${rng}";
+
     final isValid = _formKey.currentState!.validate();
 
-    if (!isValid || _selectedImage == null) {
+    if (!isValid) {
       return;
     }
 
@@ -60,19 +44,19 @@ class _signUpScreenState extends State<signUpScreen> {
       setState(() {
         _isAuthenticating = true;
       });
-      final userCredenitisl = _firebase.createUserWithEmailAndPassword(
-          email: _enteredEmail, password: _enteredPassword);
-
       final userCredentials = await _firebase.createUserWithEmailAndPassword(
           email: _enteredEmail, password: _enteredPassword);
-      final storageRef = FirebaseStorage.instance
-          .ref() // just a reference to our firebase storage so that we can modify it
-          .child('user_images') // to create a new path in the folder
-          .child('${userCredentials.user!.uid}.jpg');
-
-      await storageRef.putFile(_selectedImage!); // to put the file to that path
-      final imageUrl = await storageRef
-          .getDownloadURL(); // we need this so that later we can actually use and display that image and that s why we put it later in image_url
+      if (_selectedImage != null) {
+        final storageRef = FirebaseStorage.instance
+            .ref() // just a reference to our firebase storage so that we can modify it
+            .child('user_images') // to create a new path in the folder
+            .child('${userCredentials.user!.uid}.jpg');
+        await storageRef
+            .putFile(_selectedImage!); // to put the file to that path
+        imageUrl = await storageRef
+            .getDownloadURL(); // we need this so that later we can actually use and display that image and that s why we put it later in image_url
+      }
+      // we need this so that later we can actually use and display that image and that s why we put it later in image_url
       await FirebaseFirestore.instance
           .collection(
               "users") // folders that contains data, create a new collection named users if it doesn t exist
@@ -81,6 +65,8 @@ class _signUpScreenState extends State<signUpScreen> {
           .set({
         'username': _enteredUsername,
         'email': _enteredEmail,
+        'lastName': _enteredLastName,
+        'firstName': _enteredFirstName,
         'image_url': imageUrl,
       });
 
@@ -90,6 +76,12 @@ class _signUpScreenState extends State<signUpScreen> {
           .collection("SOCIAL")
           .doc("manageFriends")
           .set({'friends': [], 'sent_requests': [], 'incoming_requests': []});
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc('${userCredentials.user!.uid}')
+          .collection("SOCIAL")
+          .doc("groups")
+          .set({'inGroups': []});
     } on FirebaseAuthException catch (error) {
       if (error.code == 'email-already-in-use') {
         //.....
@@ -162,6 +154,34 @@ class _signUpScreenState extends State<signUpScreen> {
                           },
                         ),
                         TextFormField(
+                          decoration: InputDecoration(labelText: 'first name'),
+                          autocorrect: false,
+                          textCapitalization: TextCapitalization.none,
+                          validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return 'please enter a valid name';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            _enteredFirstName = value!;
+                          },
+                        ),
+                        TextFormField(
+                          decoration: InputDecoration(labelText: 'last name'),
+                          autocorrect: false,
+                          textCapitalization: TextCapitalization.none,
+                          validator: (value) {
+                            if (value == null || value.trim().isEmpty) {
+                              return 'please enter a valid name';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            _enteredLastName = value!;
+                          },
+                        ),
+                        TextFormField(
                           decoration: InputDecoration(labelText: 'username'),
                           autocorrect: false,
                           textCapitalization: TextCapitalization.none,
@@ -209,23 +229,6 @@ class _signUpScreenState extends State<signUpScreen> {
                             },
                             child: Text("Cancel"),
                           ),
-                        // ! also sign in with google stuff
-                        // Center(
-                        //   child: Card(
-                        //     elevation: 5,
-                        //     shape: RoundedRectangleBorder(
-                        //         borderRadius: BorderRadius.circular(10)),
-                        //     child: IconButton(
-                        //       iconSize: 40,
-                        //       icon: Icon(Icons.volunteer_activism_rounded),
-                        //       onPressed: () async {
-                        //         userCredentialGoogle = await signInWithGoogle();
-
-                        //         print(userCredentialGoogle);
-                        //       },
-                        //     ),
-                        //   ),
-                        // )
                       ],
                     ),
                   ),

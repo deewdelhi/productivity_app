@@ -19,8 +19,9 @@ class FirebaseRepositorySOCIAL {
             .map((doc) => MyUser(
                   id: doc.id,
                   email: doc.data()["email"],
-                  firstNmae: doc.data()["username"],
-                  lastName: doc.data()["username"],
+                  firstNmae: doc.data()["firstName"],
+                  lastName: doc.data()["lastName"],
+                  username: doc.data()["username"],
                   pictureUrl: doc.data()["image_url"],
                 ))
             .toList());

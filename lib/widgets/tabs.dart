@@ -2,8 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:productivity_app/CALENDAR/calendar.dart';
+import 'package:productivity_app/CHAT/screens/all_groupsChats_screen.dart';
+import 'package:productivity_app/CHAT/screens/chat_screen.dart';
 import 'package:productivity_app/TODO/all_todo_lists.dart';
 import 'package:productivity_app/SOCIAL/friendsScreen.dart';
+import 'package:productivity_app/providers/user_provider.dart';
 import 'package:productivity_app/widgets/main_drawer.dart';
 
 class TabsScreen extends ConsumerStatefulWidget {
@@ -34,12 +37,26 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
           builder: (ctx) => FriendsScreen(),
         ),
       );
+    } else if (identifier == "chats") {
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (ctx) => AllChatsScreen(),
+        ),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final user = ref.watch(userProvider);
     Widget activePage = AllToDoListsScreen();
+    //Widget activePage = MobileChatScreen(
+    //   name: "olaaaa",
+    //   uid: "lkdsjfsd",
+    //   isGroupChat: true,
+    //   profilePic: "s;lf",
+    // );
+
     var activePageTitle = 'ToDos';
 
     if (_selectedPageIndex == 0) {
@@ -51,7 +68,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(activePageTitle),
+        title: Text(activePageTitle + user.value!.email!),
       ),
       drawer: MainDrawer(
         onSelectScreen: _setScreen,

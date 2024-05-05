@@ -22,7 +22,6 @@ class _UserImagePickerState extends State<UserImagePicker> {
   Future<void> _pickImageSource() async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Profile Picture'),
@@ -60,6 +59,9 @@ class _UserImagePickerState extends State<UserImagePicker> {
 
   void _pickImage() async {
     await _pickImageSource();
+
+    if (_choice == 'false') return;
+
     var pickedImage;
     print(_choice);
 

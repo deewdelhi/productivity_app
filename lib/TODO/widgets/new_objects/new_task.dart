@@ -30,7 +30,7 @@ class _NewTaskState extends State<NewTask> {
   var _enteredDeadline;
   // user points??
 
-  void_submit() {
+  void _submit() {
     final isValid = _formKey.currentState!.validate();
 
     if (!isValid) {
@@ -189,7 +189,7 @@ class _NewTaskState extends State<NewTask> {
                   ElevatedButton(
                     child: Text('Create'),
                     onPressed: () {
-                      void_submit();
+                      _submit();
                     },
                   ),
                 ],

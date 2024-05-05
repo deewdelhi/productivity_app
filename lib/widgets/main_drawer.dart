@@ -104,13 +104,15 @@ class MainDrawer extends ConsumerWidget {
               color: Theme.of(context).colorScheme.onBackground,
             ),
             title: Text(
-              'My groups',
+              'My chats',
               style: Theme.of(context).textTheme.titleSmall!.copyWith(
                     color: Theme.of(context).colorScheme.onBackground,
                     fontSize: 24,
                   ),
             ),
-            onTap: () {},
+            onTap: () {
+              onSelectScreen('chats');
+            },
           ),
           ListTile(
             leading: Icon(
