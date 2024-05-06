@@ -1,5 +1,6 @@
 import 'dart:ffi';
-
+import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:productivity_app/CALENDAR/calendar.dart';
 import 'package:productivity_app/TODO/models/priority.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,6 +17,7 @@ class FirebaseRepositoryCHAT {
   //! =========================================   CREATE GROUP   =========================================
 
   void createNewGroup(Group group) async {
+    // TODO: move the logic for sending the group picture to firestore here from the new_chatScreen.dart
     Message firstMessage = Message(
       senderId: group.senderId,
       text: group.lastMessage,
@@ -80,8 +82,10 @@ class FirebaseRepositoryCHAT {
   //! =========================================   SEND TEXT MESSAGE      =========================================
 
   void sendTextMessageToFirestore(
-      String message, String user, String groupId) async {
-    print("cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc");
+      // TODO: update the group data so you can see the last message
+      String message,
+      String user,
+      String groupId) async {
     Message myMessage = Message(
       senderId: user,
       text: message,
@@ -89,8 +93,6 @@ class FirebaseRepositoryCHAT {
       timeSent: DateTime.now(),
       messageId: uuid.v4(),
     );
-    print(
-        "ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd");
 
     await _firestore
         .collection("groups")
@@ -98,9 +100,60 @@ class FirebaseRepositoryCHAT {
         .collection("Messages")
         .doc('${myMessage.messageId}')
         .set(myMessage.toMap());
+  }
 
-    print(
-        "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+  //! =========================================   SEND FILE MESSAGE      =========================================
+
+  void sendFileMessageToFirestore(
+      String messageType, File message, String user, String groupId) async {
+    String MessageId = uuid.v4();
+
+    String contactMsg;
+    // TODO: update the group data so you can see the last message
+    String lastForFirebase = '';
+
+    switch (messageType) {
+      case "image":
+        contactMsg = '📷 Photo';
+        lastForFirebase = '${MessageId}.jpg';
+        break;
+      case "video":
+        contactMsg = '📸 Video';
+        break;
+      case "audio":
+        contactMsg = '🎵 Audio';
+        break;
+      case "gif":
+        contactMsg = 'GIF';
+        break;
+      default:
+        contactMsg = 'GIF';
+    }
+
+    final storageRef = FirebaseStorage.instance
+        .ref() // just a reference to our firebase storage so that we can modify it
+        .child('group_chats_media')
+        .child('${groupId}')
+        .child('${messageType}_content') // to create a new path in the folder
+        .child(lastForFirebase);
+
+    await storageRef.putFile(message!); // to put the file to that path
+    String message_url = await storageRef
+        .getDownloadURL(); // we need this so that later we can actually use and display that image and that s why we put it later in image_url
+
+    Message myMessage = Message(
+        senderId: user,
+        text: message_url,
+        type: messageType.toEnum(),
+        timeSent: DateTime.now(),
+        messageId: MessageId);
+
+    await _firestore
+        .collection("groups")
+        .doc('${groupId}')
+        .collection("Messages")
+        .doc('${myMessage.messageId}')
+        .set(myMessage.toMap());
   }
 
   //! =========================================   GET CHAT MESSAGES   =========================================

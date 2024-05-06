@@ -69,21 +69,21 @@ class MyMessageCard extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 3),
-                        // Container(
-                        //   padding: const EdgeInsets.all(10),
-                        //   decoration: BoxDecoration(
-                        //     color: Colors.red.withOpacity(0.5),
-                        //     borderRadius: const BorderRadius.all(
-                        //       Radius.circular(
-                        //         5,
-                        //       ),
-                        //     ),
-                        //   ),
-                        //   child: DisplayTextImageGIF(
-                        //     message: repliedText,
-                        //     type: repliedMessageType,
-                        //   ),
-                        // ),
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: Colors.red.withOpacity(0.5),
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(
+                                5,
+                              ),
+                            ),
+                          ),
+                          child: DisplayTextImageGIF(
+                            message: repliedText,
+                            type: repliedMessageType,
+                          ),
+                        ),
                         const SizedBox(height: 8),
                       ],
                       DisplayTextImageGIF(

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:productivity_app/CHAT/repository/repository_chat.dart';
 import 'package:productivity_app/SOCIAL/repository/repository_friends.dart';
@@ -27,11 +29,24 @@ final groupsForUserProvider = StreamProvider<List<Group>>((ref) {
 //!  ==============================   SEND TEXT MESSAGE PROVIDER   ==============================
 final sendTextMessageProvider =
     FutureProvider.autoDispose.family((ref, List<String> data) async {
-  print("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
   final user = ref.watch(userProvider);
   final repository = ref.watch(firebaseRepositoryProvider);
   return repository.sendTextMessageToFirestore(
       data[0], user.value!.uid, data[1]);
+});
+
+//!  ==============================   SEND FILE MESSAGE PROVIDER   ==============================
+final sendFileMessageProvider =
+    FutureProvider.autoDispose.family((ref, Map<String, File?> data) async {
+  final strings = data.keys.toList();
+  var groupId = strings[1];
+  var message_type = strings[0];
+  var message = data[message_type]!;
+
+  final user = ref.watch(userProvider);
+  final repository = ref.watch(firebaseRepositoryProvider);
+  return repository.sendFileMessageToFirestore(
+      message_type, message, user.value!.uid, groupId);
 });
 
 //!  ==============================   GET MESSAGEST FOR GROUP PROVIDER   ==============================

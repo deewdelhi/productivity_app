@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:productivity_app/models/message.dart';
 import 'package:productivity_app/providers/repository_provider_CHAT.dart';
+import 'package:productivity_app/widgets/utils.dart';
 
 class BottomChatField extends ConsumerStatefulWidget {
   String groupID;
@@ -31,7 +33,6 @@ class _BottomChatFieldState extends ConsumerState<BottomChatField> {
   }
 
   void sendTextMessage() async {
-    print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     if (isShowSendButton) {
       ref.read(sendTextMessageProvider(
           [_messageController.text.trim(), widget.groupID]));
@@ -39,6 +40,23 @@ class _BottomChatFieldState extends ConsumerState<BottomChatField> {
       setState(() {
         _messageController.text = '';
       });
+    }
+  }
+
+  void sendFileMessage(
+    File file,
+    MessageEnum messageEnum,
+  ) {
+    ref.read(sendFileMessageProvider({
+      '${messageEnum.toString().split('.').last}': file,
+      '${widget.groupID}': null
+    }));
+  }
+
+  void selectImage() async {
+    File? image = await pickImageFromGallery(context);
+    if (image != null) {
+      sendFileMessage(image, MessageEnum.image);
     }
   }
 
@@ -133,8 +151,7 @@ class _BottomChatFieldState extends ConsumerState<BottomChatField> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         IconButton(
-                          // onPressed: selectImage,
-                          onPressed: () {},
+                          onPressed: selectImage,
                           icon: const Icon(
                             Icons.camera_alt,
                             color: Colors.grey,

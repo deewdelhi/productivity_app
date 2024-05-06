@@ -47,13 +47,14 @@ class _ChatListState extends ConsumerState<ChatList> {
 
             if (messageData.senderId ==
                 FirebaseAuth.instance.currentUser!.uid) {
+              print(messageData.type.toString());
               return MyMessageCard(
                 message: messageData.text,
                 date: timeSent,
                 type: messageData.type,
-                repliedText: " messageData.repliedMessage",
-                username: " messageData.repliedTo",
-                repliedMessageType: MessageEnum.text,
+                repliedText: "",
+                username: "insert username here",
+                repliedMessageType: messageData.type,
                 onLeftSwipe: () {},
                 // onLeftSwipe: () => onMessageSwipe(
                 //   messageData.text,
@@ -68,14 +69,14 @@ class _ChatListState extends ConsumerState<ChatList> {
               date: timeSent,
               type: messageData.type,
               username: "insert username here",
-              repliedMessageType: MessageEnum.text,
+              repliedMessageType: messageData.type,
               onRightSwipe: () {},
               // onRightSwipe: () => onMessageSwipe(
               //   messageData.text,
               //   false,
               //   messageData.type,
               // ),
-              repliedText: " messageData.repliedMessage",
+              repliedText: "",
             );
           },
         );
