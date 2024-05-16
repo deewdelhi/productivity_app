@@ -1,11 +1,8 @@
 import 'dart:io';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:productivity_app/CHAT/repository/repository_chat.dart';
-import 'package:productivity_app/SOCIAL/repository/repository_friends.dart';
 import 'package:productivity_app/models/group.dart';
 import 'package:productivity_app/models/message.dart';
-import 'package:productivity_app/models/user.dart';
 import 'package:productivity_app/providers/user_provider.dart';
 
 final firebaseRepositoryProvider = Provider<FirebaseRepositoryCHAT>((ref) {
@@ -57,9 +54,18 @@ final groupChatStreamProvider =
   return repository.getGroupChatStream(groupId);
 });
 
+//!  ==============================   SEND GIF PROVIDER   ==============================
+final sendGIFMessageProvider =
+    FutureProvider.autoDispose.family((ref, List<String> data) async {
+  final user = ref.watch(userProvider);
+  final repository = ref.watch(firebaseRepositoryProvider);
+  int gifUrlPartIndex = data[0].lastIndexOf('-') + 1;
+  String gifUrlPart = data[0].substring(gifUrlPartIndex);
+  String newgifUrl = 'https://i.giphy.com/media/$gifUrlPart/200.gif';
+  return repository.sendGifMessageToFirestore(
+      newgifUrl, user.value!.uid, data[1]);
+});
 
-
-//!  ==============================   --   ==============================
 //!  ==============================   --   ==============================
 //!  ==============================   --   ==============================
 //!  ==============================   --   ==============================

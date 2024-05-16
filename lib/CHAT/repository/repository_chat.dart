@@ -11,6 +11,10 @@ import 'package:productivity_app/models/group.dart';
 import 'package:productivity_app/models/message.dart';
 import 'package:productivity_app/models/user.dart'; // in the firestore there is data NOT files
 
+import 'package:uuid/uuid.dart';
+
+var uuid = Uuid();
+
 class FirebaseRepositoryCHAT {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -172,5 +176,28 @@ class FirebaseRepositoryCHAT {
       }
       return messages;
     });
+  }
+
+  //! =========================================   SEND GIF MESSAGE      =========================================
+
+  void sendGifMessageToFirestore(
+      // TODO: update the group data so you can see the last message
+      String gifUrl,
+      String user,
+      String groupId) async {
+    Message myMessage = Message(
+      senderId: user,
+      text: gifUrl,
+      type: MessageEnum.gif,
+      timeSent: DateTime.now(),
+      messageId: uuid.v4(),
+    );
+
+    await _firestore
+        .collection("groups")
+        .doc('${groupId}')
+        .collection("Messages")
+        .doc('${myMessage.messageId}')
+        .set(myMessage.toMap());
   }
 }

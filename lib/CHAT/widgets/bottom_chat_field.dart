@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:productivity_app/models/message.dart';
@@ -42,6 +43,13 @@ class _BottomChatFieldState extends ConsumerState<BottomChatField> {
       });
     }
   }
+
+  // void selectGIF() async {
+  //   //final gif = await pickGIF(context);
+  //   // if (gif != null) {
+  //   //   ref.read(sendGIFMessageProvider([gif.url, widget.groupID]));
+  //   // }
+  // }
 
   void sendFileMessage(
     File file,
@@ -133,14 +141,13 @@ class _BottomChatFieldState extends ConsumerState<BottomChatField> {
                               color: Colors.grey,
                             ),
                           ),
-                          IconButton(
-                            // onPressed: selectGIF,
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.gif,
-                              color: Colors.grey,
-                            ),
-                          ),
+                          // IconButton(
+                          //   onPressed: selectGIF,
+                          //   icon: const Icon(
+                          //     Icons.gif,
+                          //     color: Colors.grey,
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
@@ -207,20 +214,20 @@ class _BottomChatFieldState extends ConsumerState<BottomChatField> {
         isShowEmojiContainer
             ? SizedBox(
                 height: 310,
-                // child: EmojiPicker(
-                //   onEmojiSelected: ((category, emoji) {
-                //     setState(() {
-                //       _messageController.text =
-                //           _messageController.text + emoji.emoji;
-                //     });
+                child: EmojiPicker(
+                  onEmojiSelected: ((category, emoji) {
+                    setState(() {
+                      _messageController.text =
+                          _messageController.text + emoji.emoji;
+                    });
 
-                //     if (!isShowSendButton) {
-                //       setState(() {
-                //         isShowSendButton = true;
-                //       });
-                //     }
-                //   }),
-                // ),
+                    if (!isShowSendButton) {
+                      setState(() {
+                        isShowSendButton = true;
+                      });
+                    }
+                  }),
+                ),
               )
             : const SizedBox(),
       ],

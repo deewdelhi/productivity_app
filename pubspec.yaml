@@ -27,6 +27,11 @@ dependencies:
   table_calendar: ^3.1.1
   swipe_to: ^1.0.6
   cached_network_image: ^3.3.1
+  emoji_picker_flutter: ^2.2.0
+  enough_giphy_flutter: ^0.4.1
+  flutter_sound: ^9.4.6
+  permission_handler: ^11.3.1
+  time_planner: ^0.1.2+1
 
 dev_dependencies:
   flutter_test:

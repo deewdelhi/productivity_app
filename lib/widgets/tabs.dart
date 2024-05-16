@@ -60,7 +60,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
     var activePageTitle = 'ToDos';
 
     if (_selectedPageIndex == 0) {
-      activePage = TableComplexExample();
+      activePage = TableEventsExample();
       activePageTitle = 'Your Calendar';
     }
 
