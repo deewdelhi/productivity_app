@@ -6,6 +6,7 @@ import 'package:productivity_app/CALENDAR_USER/models/myEvent.dart';
 import 'package:productivity_app/CALENDAR_USER/time_planner.dart';
 import 'package:productivity_app/CALENDAR_USER/utils.dart';
 import 'package:productivity_app/providers/repository_provider_CALENDAR.dart';
+import 'package:productivity_app/providers/user_provider.dart';
 import 'package:productivity_app/widgets/loader.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:time_planner/time_planner.dart';
@@ -58,14 +59,16 @@ class _TableEventsExampleState extends ConsumerState<TableEventsExample> {
 
   void showDailyView(DateTime selectedDay, DateTime focusedDay) {
     _selectedEvents = _getEventsForDay(selectedDay);
+    final currentUser = ref.watch(userProvider);
+
     print(_selectedEvents);
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (ctx) => MyHomePage(
-          title: "idk where this will be",
-          selectedDate: selectedDay,
-          listOfEvents: _selectedEvents,
-        ),
+            title: "idk where this will be",
+            selectedDate: selectedDay,
+            listOfEvents: _selectedEvents,
+            userId: currentUser.value!.uid),
       ),
     );
   }

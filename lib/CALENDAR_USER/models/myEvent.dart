@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class MyEvent {
+  final String userId;
   final String id;
   final String description;
   final String title;
@@ -17,6 +18,7 @@ class MyEvent {
   final Color color;
   MyEvent({
     required this.id,
+    required this.userId,
     required this.description,
     required this.title,
     required this.minutesDuration,
@@ -38,6 +40,7 @@ class MyEvent {
   factory MyEvent.fromMap(Map<String, dynamic> map) {
     return MyEvent(
       id: map['id'] ?? '',
+      userId: map['userId'] ?? '',
       description: map['descripiton'] ?? '',
       title: map['title'] ?? '',
       minutesDuration: int.parse(map['durationMinutes']),

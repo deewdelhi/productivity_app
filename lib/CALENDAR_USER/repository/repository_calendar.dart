@@ -114,6 +114,7 @@ class FirebaseRepositoryCALENDAR {
 
               return MyEvent(
                   id: id,
+                  userId: user,
                   description: description,
                   title: title,
                   minutesDuration: minutesDuration,

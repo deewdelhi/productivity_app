@@ -14,12 +14,14 @@ class MyHomePage extends ConsumerStatefulWidget {
       {Key? key,
       required this.title,
       required this.selectedDate,
-      required this.listOfEvents})
+      required this.listOfEvents,
+      required this.userId})
       : super(key: key);
 
   final String title;
   final DateTime selectedDate;
   List<MyEvent> listOfEvents;
+  String userId;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -131,6 +133,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
               return newEventWidget(
                 isWithDayPicker: false,
                 onSubmitNewEvent: _onSubmitNewEvent,
+                userId: widget.userId,
               );
             },
           );

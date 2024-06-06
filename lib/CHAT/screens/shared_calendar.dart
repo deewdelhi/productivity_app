@@ -7,6 +7,7 @@ import 'package:productivity_app/CALENDAR_USER/time_planner.dart';
 import 'package:productivity_app/CALENDAR_USER/utils.dart';
 import 'package:productivity_app/providers/repository_provider_CALENDAR.dart';
 import 'package:productivity_app/providers/repository_provider_CHAT.dart';
+import 'package:productivity_app/providers/user_provider.dart';
 import 'package:productivity_app/widgets/loader.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:time_planner/time_planner.dart';
@@ -39,6 +40,7 @@ class _TableEventsExampleState extends ConsumerState<SharedCalendar> {
 
   List<MyEvent> _getEventsForDay(DateTime day) {
     String dateFormatedForKey = DateFormat('dd_MM_yyyy').format(day);
+    print("events for day ${day}:  ${mapWithEvents[dateFormatedForKey]}  ");
 
     return mapWithEvents[dateFormatedForKey] ?? [];
   }
@@ -57,19 +59,21 @@ class _TableEventsExampleState extends ConsumerState<SharedCalendar> {
     }
   }
 
-  void showDailyView(DateTime selectedDay, DateTime focusedDay) {
-    _selectedEvents = _getEventsForDay(selectedDay);
-    print(_selectedEvents);
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (ctx) => MyHomePage(
-          title: "idk where this will be",
-          selectedDate: selectedDay,
-          listOfEvents: _selectedEvents,
-        ),
-      ),
-    );
-  }
+  // void showDailyView(DateTime selectedDay, DateTime focusedDay) {
+  //   _selectedEvents = _getEventsForDay(selectedDay);
+  //   final currentUser = ref.watch(userProvider);
+
+  //   print(_selectedEvents);
+  //   Navigator.of(context).push(
+  //     MaterialPageRoute(
+  //       builder: (ctx) => MyHomePage(
+  //           title: "idk where this will be",
+  //           selectedDate: selectedDay,
+  //           listOfEvents: _selectedEvents,
+  //           userId: currentUser.value!.uid),
+  //     ),
+  //   );
+  // }
 
   Future<void> fetchEventData() async {
     List<MyEvent> listWithAllEvents = [];
@@ -92,6 +96,7 @@ class _TableEventsExampleState extends ConsumerState<SharedCalendar> {
     for (var usr in userIDSList) {
       var daysWithEventsFuture =
           ref.watch(daysWithEventsProvider_otherUsers(usr).future);
+      // TODO : merge prvatul dar uita te ce dracu ca tot incarca event urile la fiecare si nu si da overide ci isi tot adauga chestii
 
       futures.add(daysWithEventsFuture.then((data) async {
         for (var day in data) {
@@ -100,7 +105,12 @@ class _TableEventsExampleState extends ConsumerState<SharedCalendar> {
 
           await eventsForDayListFuture.then((eventsLists) {
             listWithAllEvents.addAll(eventsLists);
-            mapWithEvents[day] = eventsLists;
+            //mapWithEvents[day]!.addAll(eventsLists);
+            if (mapWithEvents[day] != null) {
+              mapWithEvents[day]!.addAll(eventsLists);
+            } else {
+              mapWithEvents[day] = eventsLists;
+            }
           }).catchError((error) {
             print(error);
           });
@@ -112,30 +122,12 @@ class _TableEventsExampleState extends ConsumerState<SharedCalendar> {
 
     await Future.wait(futures);
 
-    print("FINAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAL");
-    print(listWithAllEvents);
-
-    // final daysWithEvents = ref.watch(daysWithEventsProvider);
-    // daysWithEvents.when(
-    //   data: (data) {
-    //     for (var day in data) {
-    //       final eventsForDayList = ref.watch(eventsForDayProvider(day));
-    //       eventsForDayList.when(
-    //         data: (eventsLists) {
-    //           mapWithEvents[day] = eventsLists;
-    //         },
-    //         error: (error, stackTrace) => print(error),
-    //         loading: () => print("loading events list"),
-    //       );
-    //     }
-    //   },
-    //   error: (error, stackTrace) => print(error),
-    //   loading: () => print("loading"),
-    // );
+    print(" LIST WITH ALL EVENTSl: ${listWithAllEvents}");
   }
 
   @override
   Widget build(BuildContext context) {
+    final userId = ref.watch(userProvider);
     fetchEventData();
     return Scaffold(
         appBar: AppBar(
@@ -144,7 +136,7 @@ class _TableEventsExampleState extends ConsumerState<SharedCalendar> {
         body: Column(
           children: [
             TableCalendar<MyEvent>(
-              onDayLongPressed: showDailyView,
+              //onDayLongPressed: showDailyView,
               firstDay: kFirstDay,
               lastDay: kLastDay,
               focusedDay: _focusedDay,
@@ -188,14 +180,18 @@ class _TableEventsExampleState extends ConsumerState<SharedCalendar> {
                     borderRadius: BorderRadius.circular(12.0),
                   ),
                   child: ListTile(
-                    onTap: () => Navigator.of(context).push<EventDetailScreen>(
-                      MaterialPageRoute(
-                        builder: (ctx) =>
-                            EventDetailScreen(event: _selectedEvents[index]),
-                      ),
-                    ),
-                    title: Text('${_selectedEvents[index].title}'),
-                  ),
+                      onTap: () =>
+                          Navigator.of(context).push<EventDetailScreen>(
+                            MaterialPageRoute(
+                              builder: (ctx) => EventDetailScreen(
+                                  event: _selectedEvents[index]),
+                            ),
+                          ),
+                      // title: Text('${_selectedEvents[index].title}'),
+                      title: _selectedEvents[index].userId == userId.value!.uid
+                          ? Text('${_selectedEvents[index].title}')
+                          : Text(
+                              'private event')), // TODO try to display here the user who has that event
                 );
               },
             )),

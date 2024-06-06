@@ -11,10 +11,12 @@ var uuid = Uuid();
 class newEventWidget extends StatefulWidget {
   Function onSubmitNewEvent;
   bool isWithDayPicker;
+  String userId;
 
   newEventWidget(
       {required this.isWithDayPicker,
       required this.onSubmitNewEvent,
+      required this.userId,
       super.key});
 
   @override
@@ -134,6 +136,7 @@ class _newEventWidgetState extends State<newEventWidget> {
 
       MyEvent newEvent = MyEvent(
         id: uuid.v4(),
+        userId: widget.userId,
         color: colors[Random().nextInt(colors.length)]!,
         title: _eventTitleController.text,
         minutesDuration:
