@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:productivity_app/CALENDAR_USER/models/myEvent.dart';
+import 'package:productivity_app/providers/repository_provider_CALENDAR.dart';
+import 'package:productivity_app/providers/repository_provider_CHAT.dart';
 import 'package:productivity_app/providers/repository_provider_SOCIAL.dart';
 
 class MainDrawer extends ConsumerWidget {
@@ -127,7 +130,6 @@ class MainDrawer extends ConsumerWidget {
                     fontSize: 24,
                   ),
             ),
-            onTap: () {},
           ),
         ],
       ),

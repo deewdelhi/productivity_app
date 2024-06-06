@@ -4,17 +4,22 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:productivity_app/CALENDAR/models/myEvent.dart';
-import 'package:productivity_app/CALENDAR/newEvent_widget.dart';
+import 'package:productivity_app/CALENDAR_USER/models/myEvent.dart';
+import 'package:productivity_app/CALENDAR_USER/newEvent_widget.dart';
 import 'package:productivity_app/providers/repository_provider_CALENDAR.dart';
 import 'package:time_planner/time_planner.dart';
 
 class MyHomePage extends ConsumerStatefulWidget {
-  const MyHomePage({Key? key, required this.title, required this.selectedDate})
+  MyHomePage(
+      {Key? key,
+      required this.title,
+      required this.selectedDate,
+      required this.listOfEvents})
       : super(key: key);
 
   final String title;
   final DateTime selectedDate;
+  List<MyEvent> listOfEvents;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -32,38 +37,38 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
       Colors.lime[600]
     ];
 
-    // setState(() {
-    //   tasks.add(
-    //     TimePlannerTask(
-    //       title: "some title here oricum nu e folosit inca",
-    //       id: " to add uuid for this",
-    //       color: colors[Random().nextInt(colors.length)],
-    //       dateTime: TimePlannerDateTime(
-    //           day: Random().nextInt(1),
-    //           hour: Random().nextInt(18) + 6,
-    //           minutes: Random().nextInt(60)),
-    //       minutesDuration: Random().nextInt(90) + 30,
-    //       daysDuration: Random().nextInt(4) + 1,
-    //       onTap: () {
-    //         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-    //             content: Text('You click on time planner object')));
-    //       },
-    //       child: Text(
-    //         'this is a demo',
-    //         style: TextStyle(color: Colors.grey[350], fontSize: 12),
-    //       ),
-    //     ),
-    //   );
-    // }
-    // );
+    for (var event in widget.listOfEvents) {
+      tasks.add(
+        TimePlannerTask(
+          dateTime: TimePlannerDateTime(
+              day: 0,
+              hour:
+                  event.dateTime.hour - 1, // TODO: check this hack sigr nu e ok
+              minutes: event.minutesDuration),
+          event: event,
+          onTap: () {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text('You click on time planner object')));
+          },
+          child: Text(
+            "${event.title} at hour ${event.dateTime}",
+            style: TextStyle(color: Colors.black, fontSize: 12),
+          ),
+        ),
+      );
+    }
 
-    ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Random task added to time planner!')));
+    setState(() {});
+    print(" HERE ARE THE FUCKING TASKS");
+    print(tasks);
+
+    // ScaffoldMessenger.of(context).showSnackBar(
+    //     const SnackBar(content: Text('Random task added to time planner!')));
   }
 
   void _onSubmitNewEvent(MyEvent newEvent) {
     // Handle the returned value here
-    print('Received new event: $newEvent');
+
     ref.read(addEventProvider(newEvent));
   }
 
@@ -90,6 +95,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    _addObject(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -97,7 +103,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
       ),
       body: Center(
         child: TimePlanner(
-          startHour: 6,
+          startHour: 0,
           endHour: 23,
           use24HourFormat: false,
           //setTimeOnAxis: false,

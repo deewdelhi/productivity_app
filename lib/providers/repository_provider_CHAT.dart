@@ -23,6 +23,13 @@ final groupsForUserProvider = StreamProvider<List<Group>>((ref) {
   return repository.getGroupsForUser(user.value!.uid);
 });
 
+final usersForGroupProvider =
+    StreamProvider.autoDispose.family<List<String>, String>((ref, groupId) {
+  // final user = ref.watch(userProvider);
+  final repository = ref.watch(firebaseRepositoryProvider);
+  return repository.getUsersForGroup(groupId);
+});
+
 //!  ==============================   SEND TEXT MESSAGE PROVIDER   ==============================
 final sendTextMessageProvider =
     FutureProvider.autoDispose.family((ref, List<String> data) async {

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:productivity_app/CALENDAR/models/myEvent.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:productivity_app/CALENDAR_USER/models/myEvent.dart';
+import 'package:productivity_app/providers/repository_provider_CALENDAR.dart';
+import 'package:intl/intl.dart';
 
-class EventDetailScreen extends StatefulWidget {
+class EventDetailScreen extends ConsumerStatefulWidget {
   MyEvent event;
 
   EventDetailScreen({Key? key, required this.event}) : super(key: key);
@@ -10,7 +13,7 @@ class EventDetailScreen extends StatefulWidget {
   _EventDetailScreenState createState() => _EventDetailScreenState();
 }
 
-class _EventDetailScreenState extends State<EventDetailScreen> {
+class _EventDetailScreenState extends ConsumerState<EventDetailScreen> {
   late TextEditingController _titleController;
   late TextEditingController _descriptionController;
 
@@ -38,8 +41,11 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
           IconButton(
             icon: Icon(Icons.delete),
             onPressed: () {
-              // Implement delete functionality here
-              Navigator.pop(context, true); // Navigate back and signal deletion
+              ref.read(deleteEventProvider([
+                DateFormat('dd_MM_yyyy').format(widget.event.dateTime),
+                widget.event.id
+              ]));
+              Navigator.of(context).pop();
             },
           ),
         ],

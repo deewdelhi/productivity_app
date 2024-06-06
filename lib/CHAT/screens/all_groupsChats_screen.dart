@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:productivity_app/CALENDAR_USER/models/myEvent.dart';
 import 'package:productivity_app/CHAT/screens/chat_screen.dart';
 import 'package:productivity_app/CHAT/screens/new_chat_screen.dart';
+import 'package:productivity_app/CHAT/screens/shared_calendar.dart';
 import 'package:productivity_app/SOCIAL/searchFriendsPage.dart';
 import 'package:productivity_app/models/group.dart';
 import 'package:productivity_app/models/user.dart';
+import 'package:productivity_app/providers/repository_provider_CALENDAR.dart';
 import 'package:productivity_app/providers/repository_provider_CHAT.dart';
 import 'package:productivity_app/providers/repository_provider_SOCIAL.dart';
 import 'package:productivity_app/widgets/loader.dart';
@@ -99,6 +102,14 @@ class AllChatsScreen extends ConsumerWidget {
                               PopupMenuItem(
                                 child: const Text('See associated calendar'),
                                 value: 'see_calendar',
+                                onTap: () =>
+                                    Navigator.of(context).push<SharedCalendar>(
+                                  MaterialPageRoute(
+                                    builder: (ctx) => SharedCalendar(
+                                      groupId: groupData.groupId,
+                                    ),
+                                  ),
+                                ),
                                 // TODO: add logic for this
                               ),
                               PopupMenuItem(

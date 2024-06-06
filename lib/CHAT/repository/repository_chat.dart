@@ -1,7 +1,7 @@
 import 'dart:ffi';
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:productivity_app/CALENDAR/calendar.dart';
+import 'package:productivity_app/CALENDAR_USER/calendar.dart';
 import 'package:productivity_app/TODO/models/priority.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -80,6 +80,22 @@ class FirebaseRepositoryCHAT {
         }
       }
       return groups;
+    });
+  }
+
+  Stream<List<String>> getUsersForGroup(String groupId) {
+    return _firestore
+        .collection('groups')
+        .doc(groupId)
+        .snapshots()
+        .map((snapshot) {
+      // Ensure the document exists and the field is present
+      if (snapshot.exists && snapshot.data() != null) {
+        return List<String>.from(snapshot.data()!["membersUid"]);
+      } else {
+        // Return an empty list if the document doesn't exist or the field is not present
+        return [];
+      }
     });
   }
 

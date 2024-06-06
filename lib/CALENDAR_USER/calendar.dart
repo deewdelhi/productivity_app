@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:productivity_app/CALENDAR/detailViewEvent.dart';
-import 'package:productivity_app/CALENDAR/models/myEvent.dart';
-import 'package:productivity_app/CALENDAR/time_planner.dart';
-import 'package:productivity_app/CALENDAR/utils.dart';
+import 'package:productivity_app/CALENDAR_USER/detailViewEvent.dart';
+import 'package:productivity_app/CALENDAR_USER/models/myEvent.dart';
+import 'package:productivity_app/CALENDAR_USER/time_planner.dart';
+import 'package:productivity_app/CALENDAR_USER/utils.dart';
 import 'package:productivity_app/providers/repository_provider_CALENDAR.dart';
 import 'package:productivity_app/widgets/loader.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:time_planner/time_planner.dart';
 
 class TableEventsExample extends ConsumerStatefulWidget {
+  var isSharedCalendar;
+
+  TableEventsExample({required this.isSharedCalendar, super.key});
+
   @override
   _TableEventsExampleState createState() => _TableEventsExampleState();
 }
@@ -52,35 +56,47 @@ class _TableEventsExampleState extends ConsumerState<TableEventsExample> {
     }
   }
 
-  void _showstht(DateTime selectedDay, DateTime focusedDay) {
+  void showDailyView(DateTime selectedDay, DateTime focusedDay) {
+    _selectedEvents = _getEventsForDay(selectedDay);
+    print(_selectedEvents);
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (ctx) => MyHomePage(
           title: "idk where this will be",
           selectedDate: selectedDay,
+          listOfEvents: _selectedEvents,
         ),
       ),
     );
   }
 
   Future<void> fetchEventData() async {
-    final daysWithEvents = ref.watch(daysWithEventsProvider);
-    daysWithEvents.when(
-      data: (data) {
-        for (var day in data) {
-          final eventsForDayList = ref.watch(eventsForDayProvider(day));
-          eventsForDayList.when(
-            data: (eventsLists) {
-              mapWithEvents[day] = eventsLists;
-            },
-            error: (error, stackTrace) => print(error),
-            loading: () => print("loading events list"),
-          );
-        }
-      },
-      error: (error, stackTrace) => print(error),
-      loading: () => print("loading"),
-    );
+    //**
+    //
+    //TODO: make the fetch for user separate form the fetch for a group calendar
+
+    // */
+    if (widget.isSharedCalendar) {
+      final daysWithEvents = ref.watch(daysWithEventsProvider);
+      daysWithEvents.when(
+        data: (data) {
+          for (var day in data) {
+            final eventsForDayList = ref.watch(eventsForDayProvider(day));
+            eventsForDayList.when(
+              data: (eventsLists) {
+                mapWithEvents[day] = eventsLists;
+              },
+              error: (error, stackTrace) => print(error),
+              loading: () => print("loading events list"),
+            );
+          }
+        },
+        error: (error, stackTrace) => print(error),
+        loading: () => print("loading"),
+      );
+    } else {
+//* the fetch for the shared calendar
+    }
   }
 
   @override
@@ -93,7 +109,7 @@ class _TableEventsExampleState extends ConsumerState<TableEventsExample> {
         body: Column(
           children: [
             TableCalendar<MyEvent>(
-              onDayLongPressed: _showstht,
+              onDayLongPressed: showDailyView,
               firstDay: kFirstDay,
               lastDay: kLastDay,
               focusedDay: _focusedDay,

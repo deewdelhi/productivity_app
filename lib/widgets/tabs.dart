@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:productivity_app/CALENDAR/calendar.dart';
+import 'package:productivity_app/CALENDAR_USER/calendar.dart';
 import 'package:productivity_app/CHAT/screens/all_groupsChats_screen.dart';
 import 'package:productivity_app/CHAT/screens/chat_screen.dart';
 import 'package:productivity_app/TODO/all_todo_lists.dart';
@@ -60,7 +60,9 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
     var activePageTitle = 'ToDos';
 
     if (_selectedPageIndex == 0) {
-      activePage = TableEventsExample();
+      activePage = TableEventsExample(
+        isSharedCalendar: true,
+      );
       activePageTitle = 'Your Calendar';
     }
 

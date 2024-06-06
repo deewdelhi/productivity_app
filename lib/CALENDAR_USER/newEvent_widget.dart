@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:productivity_app/CALENDAR/models/myEvent.dart';
+import 'package:productivity_app/CALENDAR_USER/models/myEvent.dart';
 import 'package:time_planner/time_planner.dart';
 
 import 'package:uuid/uuid.dart';
