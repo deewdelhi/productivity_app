@@ -73,6 +73,15 @@ final sendGIFMessageProvider =
       newgifUrl, user.value!.uid, data[1]);
 });
 
-//!  ==============================   --   ==============================
+//!  ==============================   DELETE GROUP PROVIDER   ==============================
+
+final deleteGroupProvider =
+    FutureProvider.family<void, String>((ref, String groupId) async {
+  final repository = ref.watch(firebaseRepositoryProvider);
+
+  await repository.deleteEntireGroup(groupId);
+});
+
+
 //!  ==============================   --   ==============================
 //!  ==============================   --   ==============================

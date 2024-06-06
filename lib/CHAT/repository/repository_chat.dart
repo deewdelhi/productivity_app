@@ -216,4 +216,70 @@ class FirebaseRepositoryCHAT {
         .doc('${myMessage.messageId}')
         .set(myMessage.toMap());
   }
+
+  //! =========================================   DELETE GROUP       =========================================
+
+// - delete messages collection inside the group
+// -delete group events collection inside group
+//delte -group data
+// - delete group collection
+//
+//
+
+  Future<void> deleteCollection(AsyncValue<User?> user, String todoId) async {
+    CollectionReference subcollectionRef = FirebaseFirestore.instance
+        .collection("users")
+        .doc(user.value!.uid)
+        .collection("TODOS")
+        .doc(todoId)
+        .collection("TASKS");
+
+    QuerySnapshot querySnapshot = await subcollectionRef.get();
+
+    for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+      await documentSnapshot.reference.delete();
+    }
+    await _firestore
+        .collection("users")
+        .doc("${user.value!.uid}")
+        .collection("TODOS")
+        .doc("${todoId}")
+        .delete();
+  }
+
+  Future<void> deleteMessagesForGroup(String groupId) async {
+    CollectionReference subcollectionRef = FirebaseFirestore.instance
+        .collection("groups")
+        .doc(groupId)
+        .collection("Messages");
+
+    QuerySnapshot querySnapshot = await subcollectionRef.get();
+
+    for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+      await documentSnapshot.reference.delete();
+    }
+  }
+
+  Future<void> deleteEventsForGroup(String groupId) async {
+    CollectionReference subcollectionRef = FirebaseFirestore.instance
+        .collection("groups")
+        .doc(groupId)
+        .collection("GroupEvents");
+
+    QuerySnapshot querySnapshot = await subcollectionRef.get();
+
+    for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+      await documentSnapshot.reference.delete();
+    }
+  }
+
+  Future<void> deleteGroup(String groupId) async {
+    await _firestore.collection("groups").doc(groupId).delete();
+  }
+
+  Future<void> deleteEntireGroup(String groupId) async {
+    await deleteMessagesForGroup(groupId);
+    await deleteEventsForGroup(groupId);
+    await deleteGroup(groupId);
+  }
 }

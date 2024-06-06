@@ -6,6 +6,7 @@ import 'package:productivity_app/CHAT/screens/chat_screen.dart';
 import 'package:productivity_app/CHAT/screens/new_chat_screen.dart';
 import 'package:productivity_app/CHAT/screens/shared_calendar.dart';
 import 'package:productivity_app/SOCIAL/searchFriendsPage.dart';
+import 'package:productivity_app/TODO/widgets/dialog_delete_confirmation.dart';
 import 'package:productivity_app/models/group.dart';
 import 'package:productivity_app/models/user.dart';
 import 'package:productivity_app/providers/repository_provider_CALENDAR.dart';
@@ -110,12 +111,24 @@ class AllChatsScreen extends ConsumerWidget {
                                     ),
                                   ),
                                 ),
-                                // TODO: add logic for this
                               ),
                               PopupMenuItem(
                                 child: const Text('Delete chat and calendar'),
                                 value: 'delete_chat_calendar',
-                                // TODO: add logic for this
+                                onTap: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        String confirmationMessage =
+                                            " Are you sure you want to delete this TODO? It will also delete all the tasks inside";
+                                        return DeleteConfirmationDialog(
+                                            onConfirm: () {
+                                              ref.read(deleteGroupProvider(
+                                                  groupData.groupId));
+                                            },
+                                            message: confirmationMessage);
+                                      });
+                                },
                               ),
                               PopupMenuItem(
                                 child: const Text('Edit group participants'),
