@@ -52,6 +52,8 @@ android {
         versionName flutterVersionName
         multiDexEnabled true
          minSdkVersion 21  
+         ext.kotlin_version = '2.0.0'
+
     }
 
     buildTypes {
