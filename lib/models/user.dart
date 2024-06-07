@@ -1,6 +1,18 @@
+class Location {
+  final double lat;
+  final double lng;
+
+  Location({
+    required this.lat,
+    required this.lng,
+  });
+}
+
 class MyUser {
   MyUser(
-      {required this.firstNmae,
+      {
+      //required this.location,
+      required this.firstNmae,
       required this.lastName,
       required this.email,
       required this.id,
@@ -13,5 +25,6 @@ class MyUser {
   final String email;
   final String username;
   final String pictureUrl;
+  //final Location location;
   List<MyUser> following = [];
 }

@@ -27,6 +27,7 @@ final usersForGroupProvider =
     StreamProvider.autoDispose.family<List<String>, String>((ref, groupId) {
   // final user = ref.watch(userProvider);
   final repository = ref.watch(firebaseRepositoryProvider);
+  print("I AM INSIDE THE PROVIDEEER");
   return repository.getUsersForGroup(groupId);
 });
 

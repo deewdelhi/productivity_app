@@ -28,6 +28,17 @@ class _EditGroupMembersScreenState
     extends ConsumerState<EditGroupMembersScreen> {
   List<MyUser> _selectedFriends = [];
 
+  bool _isFirstBuild = true;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_isFirstBuild) {
+      setSelectedFriends();
+      _isFirstBuild = false;
+    }
+  }
+
   void _submit() async {
     if (_selectedFriends.isEmpty) return;
 
@@ -69,21 +80,34 @@ class _EditGroupMembersScreenState
   }
 
   void setSelectedFriends() {
-    final userFriends = ref.watch(friendsProvider);
-    var members = ref.watch(usersForGroupProvider(widget.groupId));
-    List<String> membersList = members.value!;
+    final userFriends = ref.read(friendsProvider);
+    print("This function should be set");
 
-    List<MyUser> selectedUsers =
-        userFriends.where((user) => membersList.contains(user.id)).toList();
-    _selectedFriends = selectedUsers;
+    final membersAsyncValue = ref.read(usersForGroupProvider(widget.groupId));
+
+    membersAsyncValue.when(
+      data: (membersList) {
+        List<MyUser> selectedUsers =
+            userFriends.where((user) => membersList.contains(user.id)).toList();
+        setState(() {
+          _selectedFriends = selectedUsers;
+        });
+        print("This function should be set");
+      },
+      loading: () {
+        print("Loading members...");
+      },
+      error: (error, stack) {
+        print("Error loading members: $error");
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    setSelectedFriends();
     return Scaffold(
       appBar: AppBar(
-        title: Text('New Group Chat'),
+        title: Text('Edit Members'),
         actions: [
           IconButton(
             icon: Icon(Icons.check),
