@@ -48,6 +48,7 @@ class _logInState extends State<logIn> {
         ),
       );
     }
+    Navigator.of(context).pop();
   }
 
   @override

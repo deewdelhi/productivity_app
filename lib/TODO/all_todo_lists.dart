@@ -56,7 +56,7 @@ class _AllToDoListsScreenState extends ConsumerState<AllToDoListsScreen> {
     print(todoList);
     return Scaffold(
         appBar: AppBar(
-          title: Text('ALL TODO s'),
+          // title: Text('ALL TODO s'),
           actions: [
             IconButton(
                 onPressed: () {

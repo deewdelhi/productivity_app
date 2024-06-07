@@ -69,6 +69,16 @@ class FirebaseRepositoryCHAT {
     }
   }
 
+  //! =========================================  UPDATE GROUP MEMBERS  =========================================
+
+  void updateGroupMembersFirestore(
+      String groupId, List<String> newMembers) async {
+    await FirebaseFirestore.instance
+        .collection("groups")
+        .doc(groupId)
+        .update({"membersUid": newMembers});
+  }
+
   //! =========================================   GET  GROUPS   =========================================
   Stream<List<Group>> getGroupsForUser(String user) {
     return _firestore.collection('groups').snapshots().map((event) {
@@ -218,13 +228,6 @@ class FirebaseRepositoryCHAT {
   }
 
   //! =========================================   DELETE GROUP       =========================================
-
-// - delete messages collection inside the group
-// -delete group events collection inside group
-//delte -group data
-// - delete group collection
-//
-//
 
   Future<void> deleteCollection(AsyncValue<User?> user, String todoId) async {
     CollectionReference subcollectionRef = FirebaseFirestore.instance

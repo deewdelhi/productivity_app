@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:productivity_app/CALENDAR_USER/models/myEvent.dart';
 import 'package:productivity_app/CHAT/screens/chat_screen.dart';
+import 'package:productivity_app/CHAT/screens/edit_group_members.dart';
 import 'package:productivity_app/CHAT/screens/new_chat_screen.dart';
 import 'package:productivity_app/CHAT/screens/shared_calendar.dart';
 import 'package:productivity_app/SOCIAL/searchFriendsPage.dart';
@@ -133,7 +134,15 @@ class AllChatsScreen extends ConsumerWidget {
                               PopupMenuItem(
                                 child: const Text('Edit group participants'),
                                 value: 'edit_participants',
-                                // TODO: add logic for this
+                                onTap: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (ctx) => EditGroupMembersScreen(
+                                        groupId: groupData.groupId,
+                                      ),
+                                    ),
+                                  );
+                                },
                               ),
                               PopupMenuItem(
                                 child: const Text('Edit group information'),

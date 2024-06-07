@@ -82,6 +82,18 @@ final deleteGroupProvider =
   await repository.deleteEntireGroup(groupId);
 });
 
+//!  ==============================   UPDATE GROUP MEMBERS PROVIDER   ==============================
 
-//!  ==============================   --   ==============================
+final updateGroupMembersProvider = FutureProvider.autoDispose
+    .family((ref, Map<String, List<String>> data) async {
+  final repository = ref.watch(firebaseRepositoryProvider);
+
+  String groupId = data.keys.first;
+
+  List<String> newMembers = data[groupId]!;
+
+  return repository.updateGroupMembersFirestore(groupId, newMembers);
+});
+
+
 //!  ==============================   --   ==============================

@@ -106,68 +106,68 @@ class _TableEventsExampleState extends ConsumerState<TableEventsExample> {
   Widget build(BuildContext context) {
     fetchEventData();
     return Scaffold(
-        appBar: AppBar(
-          title: Text('TableCalendar - Events'),
-        ),
+        // appBar: AppBar(
+        //   title: Text('TableCalendar - Events'),
+        // ),
         body: Column(
-          children: [
-            TableCalendar<MyEvent>(
-              onDayLongPressed: showDailyView,
-              firstDay: kFirstDay,
-              lastDay: kLastDay,
-              focusedDay: _focusedDay,
-              selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-              rangeStartDay: _rangeStart,
-              rangeEndDay: _rangeEnd,
-              calendarFormat: _calendarFormat,
-              rangeSelectionMode: _rangeSelectionMode,
-              eventLoader: _getEventsForDay,
-              startingDayOfWeek: StartingDayOfWeek.monday,
-              calendarStyle: CalendarStyle(
-                // Use `CalendarStyle` to customize the UI
-                outsideDaysVisible: false,
+      children: [
+        TableCalendar<MyEvent>(
+          onDayLongPressed: showDailyView,
+          firstDay: kFirstDay,
+          lastDay: kLastDay,
+          focusedDay: _focusedDay,
+          selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+          rangeStartDay: _rangeStart,
+          rangeEndDay: _rangeEnd,
+          calendarFormat: _calendarFormat,
+          rangeSelectionMode: _rangeSelectionMode,
+          eventLoader: _getEventsForDay,
+          startingDayOfWeek: StartingDayOfWeek.monday,
+          calendarStyle: CalendarStyle(
+            // Use `CalendarStyle` to customize the UI
+            outsideDaysVisible: false,
+          ),
+          onDaySelected: _onDaySelected,
+          // onRangeSelected: _onRangeSelected,
+          // TODO: maybe add also range ?????
+          onFormatChanged: (format) {
+            if (_calendarFormat != format) {
+              setState(() {
+                _calendarFormat = format;
+              });
+            }
+          },
+          onPageChanged: (focusedDay) {
+            _focusedDay = focusedDay;
+          },
+        ),
+        const SizedBox(height: 8.0),
+        Expanded(
+            child: ListView.builder(
+          itemCount: _selectedEvents.length,
+          itemBuilder: (context, index) {
+            return Container(
+              margin: const EdgeInsets.symmetric(
+                horizontal: 12.0,
+                vertical: 4.0,
               ),
-              onDaySelected: _onDaySelected,
-              // onRangeSelected: _onRangeSelected,
-              // TODO: maybe add also range ?????
-              onFormatChanged: (format) {
-                if (_calendarFormat != format) {
-                  setState(() {
-                    _calendarFormat = format;
-                  });
-                }
-              },
-              onPageChanged: (focusedDay) {
-                _focusedDay = focusedDay;
-              },
-            ),
-            const SizedBox(height: 8.0),
-            Expanded(
-                child: ListView.builder(
-              itemCount: _selectedEvents.length,
-              itemBuilder: (context, index) {
-                return Container(
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 12.0,
-                    vertical: 4.0,
+              decoration: BoxDecoration(
+                border: Border.all(),
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+              child: ListTile(
+                onTap: () => Navigator.of(context).push<EventDetailScreen>(
+                  MaterialPageRoute(
+                    builder: (ctx) =>
+                        EventDetailScreen(event: _selectedEvents[index]),
                   ),
-                  decoration: BoxDecoration(
-                    border: Border.all(),
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
-                  child: ListTile(
-                    onTap: () => Navigator.of(context).push<EventDetailScreen>(
-                      MaterialPageRoute(
-                        builder: (ctx) =>
-                            EventDetailScreen(event: _selectedEvents[index]),
-                      ),
-                    ),
-                    title: Text('${_selectedEvents[index].title}'),
-                  ),
-                );
-              },
-            )),
-          ],
-        ));
+                ),
+                title: Text('${_selectedEvents[index].title}'),
+              ),
+            );
+          },
+        )),
+      ],
+    ));
   }
 }

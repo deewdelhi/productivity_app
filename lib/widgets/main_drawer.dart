@@ -4,6 +4,7 @@ import 'package:productivity_app/CALENDAR_USER/models/myEvent.dart';
 import 'package:productivity_app/providers/repository_provider_CALENDAR.dart';
 import 'package:productivity_app/providers/repository_provider_CHAT.dart';
 import 'package:productivity_app/providers/repository_provider_SOCIAL.dart';
+import 'package:productivity_app/providers/user_provider.dart';
 
 class MainDrawer extends ConsumerWidget {
   const MainDrawer({super.key, required this.onSelectScreen});
@@ -14,6 +15,7 @@ class MainDrawer extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     bool areFriendRequests =
         ref.watch(firendListsProvider).value![2].isNotEmpty;
+    var user = ref.watch(userProvider);
 
     return Drawer(
       child: Column(
@@ -35,14 +37,14 @@ class MainDrawer extends ConsumerWidget {
             ),
             child: Row(
               children: [
-                Icon(
-                  Icons.question_mark,
-                  size: 48,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                const SizedBox(width: 18),
+                // Icon(
+                //   Icons.question_mark,
+                //   size: 48,
+                //   color: Theme.of(context).colorScheme.primary,
+                // ),
+                // const SizedBox(width: 18),
                 Text(
-                  'My options',
+                  '${user.value!.email}',
                   style: Theme.of(context).textTheme.titleLarge!.copyWith(
                         color: Theme.of(context).colorScheme.primary,
                       ),

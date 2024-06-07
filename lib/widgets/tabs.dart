@@ -70,7 +70,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(activePageTitle + user.value!.email!),
+        title: Text(activePageTitle),
       ),
       drawer: MainDrawer(
         onSelectScreen: _setScreen,

@@ -97,6 +97,7 @@ class _signUpScreenState extends State<signUpScreen> {
     setState(() {
       _isAuthenticating = false;
     });
+    Navigator.of(context).pop();
   }
 
   @override
