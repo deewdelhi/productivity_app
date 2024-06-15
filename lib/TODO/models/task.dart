@@ -8,7 +8,7 @@ class MyTask {
       this.priority,
       this.aproxTimeToComplete,
       this.deadline,
-      userPoints});
+      bool? isCompleted = false});
 
   final String id;
   final String title;
@@ -16,5 +16,5 @@ class MyTask {
   Priorities? priority;
   int? aproxTimeToComplete;
   DateTime? deadline;
-  int? userPoints;
+  bool? isCompleted;
 }

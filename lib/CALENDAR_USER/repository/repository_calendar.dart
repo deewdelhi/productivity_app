@@ -138,14 +138,4 @@ class FirebaseRepositoryCALENDAR {
         .doc("${ids[1]}")
         .delete();
   }
-
-  //? =========================================   stuff for the shared calendar     =========================================
-  //**
-  // in the groups there are the members, use that to get the events for separate users
-  // should add a color for each user in the group to see whose events are actaully in the calendar
-
-  //
-  // */
-
-// Combining all streams into a single stream of events for a list of user IDs
 }

@@ -1,7 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:productivity_app/TODO/models/priority.dart';
 import "package:productivity_app/TODO/models/task.dart";
 
 import 'package:flutter/material.dart';
+import 'package:productivity_app/TODO/new_deatil_task.dart';
 import 'package:productivity_app/TODO/task_detail.dart';
 
 import 'package:productivity_app/TODO/widgets/dialog_delete_confirmation.dart';
@@ -19,11 +21,13 @@ class TaskGridItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    Priority? taskPriority =
+        task.priority != null ? priorityMap[task.priority!] : null;
     return InkWell(
       onTap: () {
-        Navigator.of(context).push<TaskDetail>(
+        Navigator.of(context).push<TaskDetailPage>(
           MaterialPageRoute(
-            builder: (ctx) => TaskDetail(
+            builder: (ctx) => TaskDetailPage(
               task: task,
               todoId: todoId,
             ),
@@ -49,15 +53,15 @@ class TaskGridItem extends ConsumerWidget {
       splashColor: Theme.of(context).primaryColor,
       borderRadius: BorderRadius.circular(16),
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
+          color: taskPriority!.color,
         ),
         child: Text(
           task.title,
           style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                color: Theme.of(context).colorScheme.onBackground,
-              ),
+              color: Theme.of(context).colorScheme.onBackground, fontSize: 20),
         ),
       ),
     );

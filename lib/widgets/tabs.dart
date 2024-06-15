@@ -6,6 +6,7 @@ import 'package:productivity_app/CHAT/screens/all_groupsChats_screen.dart';
 import 'package:productivity_app/CHAT/screens/chat_screen.dart';
 import 'package:productivity_app/TODO/all_todo_lists.dart';
 import 'package:productivity_app/SOCIAL/friendsScreen.dart';
+
 import 'package:productivity_app/providers/user_provider.dart';
 import 'package:productivity_app/widgets/main_drawer.dart';
 
@@ -81,11 +82,11 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
         currentIndex: _selectedPageIndex,
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.set_meal),
+            icon: Icon(Icons.calendar_month_outlined),
             label: 'Calendar',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.star),
+            icon: Icon(Icons.note),
             label: 'ToDo',
           ),
         ],

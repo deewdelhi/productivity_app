@@ -42,12 +42,11 @@ class _NewGroupChatScreenState extends ConsumerState<NewGroupChatScreen> {
 
     if (_selectedImage != null) {
       final storageRef = FirebaseStorage.instance
-          .ref() // just a reference to our firebase storage so that we can modify it
-          .child('group_images') // to create a new path in the folder
+          .ref()
+          .child('group_images')
           .child('${groupID}.jpg');
-      await storageRef.putFile(_selectedImage!); // to put the file to that path
-      imageUrl = await storageRef
-          .getDownloadURL(); // we need this so that later we can actually use and display that image and that s why we put it later in image_url
+      await storageRef.putFile(_selectedImage!);
+      imageUrl = await storageRef.getDownloadURL();
     }
     // TODO: pune si asta in provider ca nu da tare bine aici
 

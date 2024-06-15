@@ -106,9 +106,6 @@ class _TableEventsExampleState extends ConsumerState<TableEventsExample> {
   Widget build(BuildContext context) {
     fetchEventData();
     return Scaffold(
-        // appBar: AppBar(
-        //   title: Text('TableCalendar - Events'),
-        // ),
         body: Column(
       children: [
         TableCalendar<MyEvent>(

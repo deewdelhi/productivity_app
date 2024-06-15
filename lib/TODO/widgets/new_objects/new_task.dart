@@ -45,8 +45,7 @@ class _NewTaskState extends State<NewTask> {
         priority: _enteredPriority,
         aproxTimeToComplete: _enteredAproxTimeToComplete,
         deadline: _enteredDeadline,
-        userPoints: 0);
-    //! find a way to calculate user points??
+        isCompleted: false);
 
     Navigator.of(context).pop(newTask);
   }
@@ -54,11 +53,12 @@ class _NewTaskState extends State<NewTask> {
   void _presentDatePicker() async {
     final now = DateTime.now();
     final firstDate = DateTime(now.year - 1, now.month, now.day);
+    final lastDate = DateTime(now.year + 1, now.month, now.day);
     final pickedDate = await showDatePicker(
       context: context,
       initialDate: now,
       firstDate: firstDate,
-      lastDate: now,
+      lastDate: lastDate,
     );
     setState(() {
       _enteredDeadline = pickedDate;
@@ -68,16 +68,20 @@ class _NewTaskState extends State<NewTask> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset:
+          true, // Ensure the Scaffold adjusts to the keyboard
       appBar: AppBar(
         title: Text('New Task'),
       ),
-      body: Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              child: TextFormField(
+      body: SingleChildScrollView(
+        // make page scrollable when keyboard appears
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SizedBox(height: 20),
+              TextFormField(
                 decoration: InputDecoration(
                   labelText: 'Title',
                 ),
@@ -93,9 +97,8 @@ class _NewTaskState extends State<NewTask> {
                   _enteredTitle = value!;
                 },
               ),
-            ),
-            Expanded(
-              child: TextFormField(
+              SizedBox(height: 20),
+              TextFormField(
                 decoration: InputDecoration(
                   labelText: 'Description',
                 ),
@@ -105,50 +108,36 @@ class _NewTaskState extends State<NewTask> {
                   }
                 },
               ),
-            ),
-            // Expanded(
-            //   child: TextFormField(
-            //     decoration: InputDecoration(
-            //       labelText: 'Approximate Time',
-            //     ),
-            //     initialValue: "0",
-            //     onSaved: (value) {
-            //       if (value != null) {
-            //         _enteredAproxTimeToComplete = int.parse(value);
-            //       }
-            //     },
-            //   ),
-            // ),
-
-            Expanded(
-                child: DropdownButtonFormField<Priorities>(
-              value: _enteredPriority,
-              items: Priorities.values.map((priority) {
-                return DropdownMenuItem<Priorities>(
-                  value: priority,
-                  child: Row(
-                    children: <Widget>[
-                      Icon(Icons.error, color: priorityMap[priority]!.color),
-                      SizedBox(width: 10),
-                      Text(priorityMap[priority]!.title),
-                    ],
-                  ),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  _enteredPriority = value!;
-                });
-              },
-            )),
-            Expanded(
-              child: Row(
+              SizedBox(height: 20),
+              DropdownButtonFormField<Priorities>(
+                value: _enteredPriority,
+                items: Priorities.values.map((priority) {
+                  return DropdownMenuItem<Priorities>(
+                    value: priority,
+                    child: Row(
+                      children: <Widget>[
+                        Icon(Icons.error, color: priorityMap[priority]!.color),
+                        SizedBox(width: 10),
+                        Text(priorityMap[priority]!.title),
+                      ],
+                    ),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _enteredPriority = value!;
+                  });
+                },
+              ),
+              SizedBox(height: 20),
+              Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
                     child: Column(
                       children: [
+                        Text('Minutes to complete:'),
                         NumberPicker(
                           value: _enteredAproxTimeToComplete,
                           minValue: 0,
@@ -159,12 +148,12 @@ class _NewTaskState extends State<NewTask> {
                       ],
                     ),
                   ),
+                  SizedBox(height: 20),
                   Text(
                     _enteredDeadline == null
-                        ? 'No date selected'
+                        ? 'Deadline: No date selected'
                         //: _enteredDeadline,
-                        : DateFormat('yyyy-MM-dd – kk:mm')
-                            .format(_enteredDeadline),
+                        : 'Deadline: ${DateFormat('EEEE, d.MM.yyyy').format(_enteredDeadline)}',
                   ),
                   IconButton(
                     onPressed: _presentDatePicker,
@@ -174,28 +163,28 @@ class _NewTaskState extends State<NewTask> {
                   ),
                 ],
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  TextButton(
-                    child: Text('Cancel'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  ElevatedButton(
-                    child: Text('Create'),
-                    onPressed: () {
-                      _submit();
-                    },
-                  ),
-                ],
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    TextButton(
+                      child: Text('Cancel'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    ElevatedButton(
+                      child: Text('Create'),
+                      onPressed: () {
+                        _submit();
+                      },
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

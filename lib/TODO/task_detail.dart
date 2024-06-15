@@ -36,7 +36,6 @@ class _TaskDetailState extends ConsumerState<TaskDetail> {
     aproxTimeController.text =
         widget.task.aproxTimeToComplete?.toString() ?? '';
     deadlineController.text = widget.task.deadline?.toString() ?? '';
-    userPointsController.text = widget.task.userPoints?.toString() ?? '';
   }
 
   @override
@@ -47,11 +46,9 @@ class _TaskDetailState extends ConsumerState<TaskDetail> {
         actions: [
           IconButton(
             onPressed: () {
-              // TODO add the logic for saving the new task
-              // TODO: DO THE FUCKING UPDATEEEEEEEE
               Navigator.of(context).pop();
             },
-            icon: Icon(Icons.save),
+            icon: Icon(Icons.edit_note_rounded),
           ),
           IconButton(
             onPressed: () {

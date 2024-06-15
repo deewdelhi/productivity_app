@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:productivity_app/TODO/all_todo_lists.dart';
+import 'package:productivity_app/authentication/auth_provider.dart';
 import 'package:productivity_app/authentication/logIn.dart';
 import 'package:productivity_app/authentication/welcome.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -10,12 +11,14 @@ import 'package:productivity_app/authentication/splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:productivity_app/providers/user_provider.dart';
 
+final userDataProvider = StateProvider<Map<String, dynamic>?>((ref) {
+  return null;
+});
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(ProviderScope(
-      child:
-          MyApp())); // providerScope e de la riverpod ca sa poti sa folosesti consumer and the providers, also put in the app cause i want to use the providers in the entire app
+  runApp(ProviderScope(child: MyApp()));
 }
 
 class MyApp extends ConsumerWidget {
@@ -30,7 +33,9 @@ class MyApp extends ConsumerWidget {
             ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 45, 94, 4)),
         useMaterial3: true,
       ),
-      home: StreamBuilder(
+      home:
+          //AuthenticationWrapper()
+          StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (ctx, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {

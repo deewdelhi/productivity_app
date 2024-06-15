@@ -61,11 +61,6 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
     }
 
     setState(() {});
-    print(" HERE ARE THE FUCKING TASKS");
-    print(tasks);
-
-    // ScaffoldMessenger.of(context).showSnackBar(
-    //     const SnackBar(content: Text('Random task added to time planner!')));
   }
 
   void _onSubmitNewEvent(MyEvent newEvent) {
@@ -73,27 +68,6 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
 
     ref.read(addEventProvider(newEvent));
   }
-
-  // void _onFloatingActionButtonPressed(BuildContext context) {
-  //   Navigator.push(
-  //     context,
-  //     MaterialPageRoute(
-  //       builder: (context) => newEventWidget(
-  //         onSubmitNewEvent: _onSubmitNewEvent,
-  //         isWithDayPicker: true,
-  //       ),
-  //     ),
-  //   ).then((result) {
-  //     if (result != null) {
-  //       print("dsssssssssssssssssssssssssssssssssssss");
-  //       print(result);
-  //       setState(() {
-  //         // Update the state with the result
-  //         // tasks.add(result);
-  //       });
-  //     }
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {

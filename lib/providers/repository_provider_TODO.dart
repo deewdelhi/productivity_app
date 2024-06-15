@@ -51,8 +51,18 @@ final deleteTaskProvider =
   await repository.deleteTask(user, ids);
 });
 
-
-
-
 //!  ==============================   UPDATE DATA PROVIDER   ==============================
 
+final updateTaskProvider =
+    FutureProvider.autoDispose.family((ref, Map<String, MyTask> data) async {
+  final repository = ref.watch(firebaseRepositoryProvider);
+  final user = ref.watch(userProvider);
+  return repository.updateTask(user, data);
+});
+
+final updateTaskCompletionProvider =
+    FutureProvider.autoDispose.family((ref, Map<String, MyTask> data) async {
+  final repository = ref.watch(firebaseRepositoryProvider);
+  final user = ref.watch(userProvider);
+  return repository.updateTaskCompletion(user, data);
+});

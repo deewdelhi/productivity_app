@@ -63,11 +63,6 @@ class _AllToDoListsScreenState extends ConsumerState<AllToDoListsScreen> {
                   _addToDo(user);
                 },
                 icon: Icon(Icons.add)),
-            IconButton(
-                onPressed: () {
-                  FirebaseAuth.instance.signOut();
-                },
-                icon: Icon(Icons.exit_to_app)),
           ],
         ),
         body: todoList.when(

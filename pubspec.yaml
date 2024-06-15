@@ -32,11 +32,13 @@ dependencies:
   flutter_sound: ^9.4.6
   permission_handler: ^11.3.1
   time_planner: ^0.1.2+1
+  mockito: ^5.4.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.0
+  build_runner: ^2.4.9
 
 flutter:
   uses-material-design: true

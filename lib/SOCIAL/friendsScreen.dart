@@ -23,9 +23,6 @@ class _FriendsScreenState extends ConsumerState<FriendsScreen> {
 
     // list with all the freinds for the user (MyUser obj)
     final userFriends = ref.watch(friendsProvider);
-    print(
-        " Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem");
-    print(userFriends);
 
     // list with social managememts data [[],[],[]]
     final userSocialManagementLists = ref.watch(firendListsProvider).value!;

@@ -65,7 +65,8 @@ class FirebaseRepositoryTODO {
 
               final aproxTimeToComplete =
                   doc.data()["aproximateTimeToComplete"];
-              final userPoints = doc.data()["userPoints"];
+
+              bool isCompleted = doc.data()["isCompleted"] == "true";
 
               return MyTask(
                 id: id,
@@ -74,7 +75,7 @@ class FirebaseRepositoryTODO {
                 priority: priority,
                 aproxTimeToComplete: aproxTimeToComplete,
                 deadline: deadline,
-                userPoints: userPoints,
+                isCompleted: isCompleted,
               );
             }).toList());
   }
@@ -122,7 +123,7 @@ class FirebaseRepositoryTODO {
       'priority': priority,
       'aproximateTimeToComplete': task.aproxTimeToComplete,
       'deadline': task.deadline,
-      'userPoints': task.userPoints
+      'isCompleted': task.isCompleted.toString()
     };
 
     await FirebaseFirestore.instance
@@ -170,5 +171,65 @@ class FirebaseRepositoryTODO {
         .collection("TASKS")
         .doc("${ids[1]}")
         .delete();
+  }
+
+  //!  ==============================   UPDATE DATA   ==============================
+
+  void updateTask(AsyncValue<User?> user, Map<String, MyTask> dataTask) async {
+    var priority;
+    String todoId = dataTask.keys.first;
+    MyTask task = dataTask[todoId]!;
+
+    switch (task.priority!) {
+      case Priorities.low:
+        {
+          priority = "low";
+        }
+        break;
+
+      case Priorities.medium:
+        {
+          priority = "medium";
+        }
+        break;
+      case Priorities.high:
+        {
+          priority = "high";
+        }
+        break;
+    }
+
+    var data = {
+      'title': task.title,
+      'description': task.description,
+      'priority': priority,
+      'aproximateTimeToComplete': task.aproxTimeToComplete,
+      'deadline': task.deadline,
+      'isCompleted': task.isCompleted
+    };
+
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc('${user.value!.uid}')
+        .collection("TODOS")
+        .doc("${todoId}")
+        .collection("TASKS")
+        .doc(task.id)
+        .update(data);
+  }
+
+  void updateTaskCompletion(
+      AsyncValue<User?> user, Map<String, MyTask> dataTask) async {
+    String todoId = dataTask.keys.first;
+    MyTask task = dataTask[todoId]!;
+
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc('${user.value!.uid}')
+        .collection("TODOS")
+        .doc("${todoId}")
+        .collection("TASKS")
+        .doc(task.id)
+        .update({'isCompleted': task.isCompleted});
   }
 }
