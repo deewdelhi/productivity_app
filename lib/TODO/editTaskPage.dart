@@ -18,7 +18,6 @@ class _EditTaskPageState extends State<EditTaskPage> {
   late String _title;
   String? _description;
   Priorities? _priority;
-  int? _userPoints;
   int? _enteredAproxTimeToComplete;
   DateTime? _enteredDeadline;
 
@@ -43,6 +42,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
         priority: _priority,
         aproxTimeToComplete: _enteredAproxTimeToComplete,
         deadline: _enteredDeadline,
+        isCompleted: widget.task.isCompleted,
       );
 
       Navigator.pop(context, updatedTask);
@@ -153,7 +153,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
                     Text(
                       _enteredDeadline == null
                           ? 'No date selected'
-                          : 'Deadline: ${DateFormat('EEEE, d.MM.yyyy').format(widget.task.deadline!)}',
+                          : 'Deadline: ${DateFormat('EEEE, d.MM.yyyy').format(_enteredDeadline!)}',
                     ),
                     IconButton(
                       onPressed: _presentDatePicker,
